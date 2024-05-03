@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# This script displays a list of currently running processes.
 
-# Use the ps command to list all processes for all users, including process hierarchy
-ps aux --forest
+ps auxf
+
