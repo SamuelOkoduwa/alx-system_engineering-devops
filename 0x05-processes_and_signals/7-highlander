@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# This script stops the 4-to_infinity_and_beyond process without using kill or killall.
+
+# Function to handle SIGTERM signal
+handle_sigterm() {
+    echo "I am invincible!!!"
+}
+
+# Trap SIGTERM signal and call the function
+trap 'handle_sigterm' SIGTERM
+
+# Infinite loop with sleep 2 between iterations
+while true
+do
+    echo "To infinity and beyond"
+    sleep 2
+done
