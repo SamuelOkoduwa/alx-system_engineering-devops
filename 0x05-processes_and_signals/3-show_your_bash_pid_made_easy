@@ -11,7 +11,9 @@ BASH_PROCESSES=$(pgrep -f bash)
 for PID in $BASH_PROCESSES; do
     # Skip the script's own PID
     if [[ $PID -ne $SCRIPT_PID ]]; then
-        PROCESS_NAME=$(ps -p $PID -o comm=)
+	 PROCESS_NAME=$(ps -p "$PID" -o comm=)
         echo "$PID $PROCESS_NAME"
     fi
 done
+
+
