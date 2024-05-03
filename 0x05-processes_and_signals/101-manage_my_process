@@ -16,7 +16,7 @@ start_process() {
 stop_process() {
     if [[ -f $PID_FILE ]]; then
         PID=$(cat $PID_FILE)
-        kill $PID && echo "manage_my_process stopped"
+        kill "$PID" && echo "manage_my_process stopped"
         rm $PID_FILE
     else
         echo "manage_my_process is not running"
