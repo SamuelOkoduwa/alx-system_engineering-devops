@@ -6,7 +6,8 @@ PID=$(pgrep -f "4-to_infinity_and_beyond")
 
 if [[ -n $PID ]]; then
     # If the PID is not empty (process exists), kill it
-    kill $PID
+    kill "$PID"
+
 else
     echo "4-to_infinity_and_beyond process not found."
 fi
