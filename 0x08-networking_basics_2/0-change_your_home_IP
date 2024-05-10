@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# This script configures localhost to resolve to 127.0.0.2 and facebook.com to resolve to 8.8.8.8
+
+# Check if running as root
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Please run this script with sudo or as root."
+    exit 1
+fi
+
+# Edit hosts file to configure IP addresses
+hosts_file="/etc/hosts"
+temp_file=$(mktemp)
+
+# Update localhost entry to resolve to 127.0.0.2
+sed '/^127.0.0.1/ s/$/  localhost.localdomain localhost/' "$hosts_file" > "$temp_file"
+echo "127.0.0.2 localhost" >> "$temp_file"
+
+# Update facebook.com entry to resolve to 8.8.8.8
+echo "8.8.8.8 facebook.com" >> "$temp_file"
+
+# Replace the original hosts file with the updated one
+mv "$temp_file" "$hosts_file"
+
+# Flush DNS cache
+systemctl restart systemd-resolved
+
+echo "Configured localhost to resolve to 127.0.0.2 and facebook.com to resolve to 8.8.8.8."
+
