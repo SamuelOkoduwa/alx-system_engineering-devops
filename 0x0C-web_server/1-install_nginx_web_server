@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# This script installs and configures Nginx on an Ubuntu machine
+
+# Exit on any error
+set -e
+
+# Update the package list
+apt-get update -y
+
+# Install Nginx
+apt-get install nginx -y
+
+# Create the Hello World page
+echo 'Hello World!' > /var/www/html/index.html
+
+# Start Nginx without systemctl
+service nginx start
+
+# Ensure Nginx is started on boot
+update-rc.d nginx defaults
+
