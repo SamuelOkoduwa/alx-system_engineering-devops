@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# This script configures Nginx to redirect /redirect_me to another page with a 301 status
+
+# Exit on any error
+set -e
+
+# Update the package list
+apt-get update -y
+
+# Install Nginx if it is not installed
+apt-get install nginx -y
+
+# Create the Hello World page
+echo 'Hello World!' > /var/www/html/index.html
+
+# Configure the Nginx server block for the redirection
+sed -i '/server_name _;/a \    location /redirect_me {\n        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n    }' /etc/nginx/sites-available/default
+
+# Start Nginx without systemctl
+service nginx restart
+
+# Ensure Nginx is started on boot
+update-rc.d nginx defaults
+
