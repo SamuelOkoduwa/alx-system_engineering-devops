@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 # This script configures a brand new Ubuntu server with Nginx and sets a custom HTTP response header
 
-# Update and install Nginx
+# Update package lists and install Nginx
 apt-get update
 apt-get install -y nginx
 
-# Get the hostname
+# Get the hostname of the server
 HOSTNAME=$(hostname)
 
 # Configure Nginx to add the custom header
-cat <<EOF > /etc/nginx/conf.d/custom_header.conf
+cat <<EOF > /etc/nginx/sites-available/default
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
