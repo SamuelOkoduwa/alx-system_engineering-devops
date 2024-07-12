@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# This script audits subdomains of a given domain
+
+function get_subdomain_info {
+  local domain=$1
+  local subdomain=$2
+
+  if [ -z "$subdomain" ]; then
+    subdomains=("www" "lb-01" "web-01" "web-02")
+  else
+    subdomains=("$subdomain")
+  fi
+
+  for sub in "${subdomains[@]}"; do
+    dig_output=$(dig "$sub.$domain" +short)
+    record_type="A"
+    echo "The subdomain $sub is a $record_type record and points to $dig_output"
+  done
+}
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 domain [subdomain]"
+  exit 1
+fi
+
+domain=$1
+subdomain=$2
+
+get_subdomain_info "$domain" "$subdomain"
+
