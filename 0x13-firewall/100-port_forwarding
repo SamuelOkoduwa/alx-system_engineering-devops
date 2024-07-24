@@ -1,3 +1,5 @@
+# This configuration enables port forwarding from port 8080 to port 80 using UFW.
+
 # Enable port forwarding
 sudo nano /etc/sysctl.conf
 # Add the line
@@ -16,4 +18,3 @@ COMMIT
 # Restart UFW to apply changes
 sudo ufw disable
 sudo ufw enable
-
