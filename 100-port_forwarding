@@ -1,0 +1,19 @@
+# Enable port forwarding
+sudo nano /etc/sysctl.conf
+# Add the line
+net.ipv4.ip_forward=1
+# Apply the changes
+sudo sysctl -p
+
+# Edit UFW before.rules to add port forwarding
+sudo nano /etc/ufw/before.rules
+# Add these lines before the *filter line
+*nat
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+COMMIT
+
+# Restart UFW to apply changes
+sudo ufw disable
+sudo ufw enable
+
