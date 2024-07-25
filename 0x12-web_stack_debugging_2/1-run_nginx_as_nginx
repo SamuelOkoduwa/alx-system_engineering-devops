@@ -1,12 +1,28 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# This script configures Nginx to run as the nginx user and listen on port 8080
 
-# Update nginx configuration file to run as nginx user and listen on port 8080
-sed -i 's/user .*/user nginx;/g' /etc/nginx/nginx.conf
-sed -i 's/listen 80;/listen 8080;/g' /etc/nginx/sites-available/default
+# Update the Nginx configuration to run as the nginx user
+sed -i 's/user .*;/user nginx;/' /etc/nginx/nginx.conf
 
-# Ensure ownership and permissions are correct
-chown -R nginx:nginx /var/log/nginx /var/cache/nginx /var/run/nginx.pid
+# Update the Nginx configuration to listen on port 8080
+sed -i 's/listen 80 default_server;/listen 8080 default_server;/' /etc/nginx/sites-available/default
+sed -i 's/listen \[::\]:80 default_server;/listen \[::\]:8080 default_server;/' /etc/nginx/sites-available/default
 
-# Restart nginx to apply changes
-service nginx restart
+# Ensure the nginx user owns the necessary directories
+chown -R nginx:nginx /var/lib/nginx /var/log/nginx /var/www/html
 
+# Restart Nginx to apply the changes
+systemctl restart nginx
+
+# Verify the changes
+if ps aux | grep '[n]ginx: master process'; then
+    echo "Nginx is running as nginx user"
+else
+    echo "Nginx is not running as nginx user"
+fi
+
+if nc -z 0 8080; then
+    echo "Nginx is listening on port 8080"
+else
+    echo "Nginx is not listening on port 8080"
+fi
