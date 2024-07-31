@@ -21,20 +21,23 @@ if __name__ == "__main__":
     user_url = f"https://jsonplaceholder.typicode.com/users/{user_id}"
     todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={user_id}"
 
-    # Make a GET request to fetch user details
+    # Make GET requests to fetch user details and TODO list
     user_response = requests.get(user_url)
-    user_data = user_response.json()
-
-    # Make a GET request to fetch user's TODO list
     todos_response = requests.get(todos_url)
+
+    user_data = user_response.json()
     todos_data = todos_response.json()
 
-    # Extract the username from the user data
+    # Extract username from the user data
     username = user_data.get('username')
 
-    # Open a CSV file to write the data
+    # Write CSV data to file
     with open(f"{user_id}.csv", mode='w', newline='') as file:
         writer = csv.writer(file, quoting=csv.QUOTE_ALL)
         for task in todos_data:
-            writer.writerow([user_id, username, task.get('completed'), task.get('title')])
-
+            writer.writerow([
+                user_id,
+                username,
+                task.get('completed'),
+                task.get('title')
+            ])
