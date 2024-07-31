@@ -1,47 +1,50 @@
 #!/usr/bin/python3
+"""
+This script uses the JSONPlaceholder API to gather data for a given employee ID
+and exports the data in JSON format.
+"""
+
 import json
 import requests
 import sys
 
 if __name__ == "__main__":
+    # Check if the correct number of arguments are provided
     if len(sys.argv) != 2:
         print("Usage: ./2-export_to_JSON.py <employee_id>")
         sys.exit(1)
-    
-    employee_id = sys.argv[1]
-    try:
-        employee_id = int(employee_id)
-    except ValueError:
-        print("Employee ID must be an integer.")
-        sys.exit(1)
-    
-    base_url = "https://jsonplaceholder.typicode.com/"
-    user_url = f"{base_url}users/{employee_id}"
-    todos_url = f"{base_url}todos?userId={employee_id}"
-    
-    user_response = requests.get(user_url)
-    todos_response = requests.get(todos_url)
-    
-    if user_response.status_code != 200 or todos_response.status_code != 200:
-        print("Error fetching data from API.")
-        sys.exit(1)
-    
-    user_data = user_response.json()
-    todos_data = todos_response.json()
-    
-    employee_name = user_data.get("username")
-    
-    tasks = []
-    for task in todos_data:
-        task_dict = {
-            "task": task.get("title"),
-            "completed": task.get("completed"),
-            "username": employee_name
-        }
-        tasks.append(task_dict)
-    
-    employee_tasks = {str(employee_id): tasks}
-    
-    with open(f"{employee_id}.json", mode='w') as json_file:
-        json.dump(employee_tasks, json_file)
 
+    # Get the employee ID from the command line argument
+    user_id = int(sys.argv[1])
+
+    # URLs for the user and the user's TODO list
+    user_url = f"https://jsonplaceholder.typicode.com/users/{user_id}"
+    todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={user_id}"
+
+    # Make a GET request to fetch user details
+    user_response = requests.get(user_url)
+    user_data = user_response.json()
+
+    # Make a GET request to fetch user's TODO list
+    todos_response = requests.get(todos_url)
+    todos_data = todos_response.json()
+
+    # Extract the username from the user data
+    username = user_data.get('username')
+
+    # Prepare data for JSON export
+    data = {
+        str(user_id): {
+            username: [
+                {
+                    "task": task.get('title'),
+                    "completed": task.get('completed')
+                }
+                for task in todos_data
+            ]
+        }
+    }
+
+    # Write JSON data to file
+    with open(f"{user_id}.json", 'w') as file:
+        json.dump(data, file)
