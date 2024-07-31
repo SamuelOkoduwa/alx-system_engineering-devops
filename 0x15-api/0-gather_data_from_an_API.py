@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
-This script uses the JSONPlaceholder API to gather data for a given employee ID.
-It returns information about the employee's TODO list progress.
+This script uses the JSONPlaceholder API to gather data for a given employee ID
+and returns information about the employee's TODO list progress.
 """
 
 import requests
@@ -20,23 +20,22 @@ if __name__ == "__main__":
     user_url = f"https://jsonplaceholder.typicode.com/users/{user_id}"
     todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={user_id}"
 
-    # Make a GET request to fetch user details
+    # Make GET requests to fetch user details and TODO list
     user_response = requests.get(user_url)
-    user_data = user_response.json()
-
-    # Make a GET request to fetch user's TODO list
     todos_response = requests.get(todos_url)
+
+    user_data = user_response.json()
     todos_data = todos_response.json()
 
-    # Extract the employee's name from the user data
+    # Extract employee name
     employee_name = user_data.get('name')
 
-    # Calculate the total number of tasks and the number of completed tasks
+    # Calculate total and completed tasks
     total_tasks = len(todos_data)
     done_tasks = [task for task in todos_data if task.get('completed')]
 
     # Print the employee's TODO list progress
-    print(f"Employee {employee_name} is done with tasks({len(done_tasks)}/{total_tasks}):")
+    print(f"Employee {employee_name} is done with tasks("
+          f"{len(done_tasks)}/{total_tasks}):")
     for task in done_tasks:
         print(f"\t {task.get('title')}")
-
